@@ -164,12 +164,14 @@ __on_player_connects(player) -> (
 			mined += statistic(player, 'mined', _);
 			used += statistic(player, 'used', _);
 		);
-		scoreboard('scbd.mine', player, mined);
-		scoreboard('scbd.place', player, used);
 		
-		scoreboard('scbd.trade', player, statistic(player, 'custom', 'traded_with_villager'));
-		scoreboard('scbd.deaths', player, statistic(player, 'custom', 'deaths'));
-		run('tag ' + player + ' add synced');
+		if(!query(player, 'has_scoreboard_tag', 'synced'),
+			scoreboard('scbd.mine', player, mined);
+			scoreboard('scbd.place', player, used);
+			scoreboard('scbd.trade', player, statistic(player, 'custom', 'traded_with_villager'));
+			scoreboard('scbd.deaths', player, statistic(player, 'custom', 'deaths'));
+			run('tag ' + player + ' add synced');
+		);
 	);
 );
 
