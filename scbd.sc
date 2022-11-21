@@ -77,7 +77,6 @@ check_all_bedrock() -> (
 
 check_player_bedrock(e) -> (
 	dim = query(e, 'dimension');
-	//print('Alex3236', dim);
 	bedrocks = global_bedrocks:dim;
 	in_dimension(dim,
 		[x, y, z] = query(e, 'pos');
@@ -96,7 +95,6 @@ check_player_bedrock(e) -> (
 		);
 		global_bedrocks:dim = bedrocks;
 	);
-	//print('Alex3236', global_bedrocks);
 );
 
 update_all_scbds() -> (
