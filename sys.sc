@@ -1,7 +1,9 @@
+// Sys
+
 __config() -> {
    'scope' -> 'global',
    'commands' -> {
-		'' -> 'print_seed'
+		'' -> 'print_info'
 	},
     'command_permission' -> 1
 };
@@ -12,7 +14,7 @@ pprint(msg) -> (
 
 s(prop) -> system_info(prop);
 
-print_seed() -> (
+print_info() -> (
     pprint('');
     pprint(format('w 世界名称：', 'l ' + s('world_name'), 'w    种子：[', 'l ' + s('world_seed'), '&' + s('world_seed'), '^w 点击以复制', 'w ]'));
     pprint('');
