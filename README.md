@@ -1,13 +1,13 @@
 # ScarpetScripts
-一些~~有用的~~ Scarpet 脚本
+一些~~有用的~~ [Scarpet](https://github.com/gnembon/scarpet) 脚本
 
-## 环境
+- 在 `Minecraft 1.19.2`, `Carpet Mod v1.4.84` 下测试通过。
 
-仅在 `Minecraft 1.19.2`, `Carpet Mod v1.4.84` 下测试通过。Scarpet 文档中未给出 API 兼容性相关说明，因此请自行尝试。
+- Scarpet 文档中未给出 API 兼容说明，请自行测试。
 
-应当按 Carpet Mod 要求将脚本（`*.sc`）放置在 `<world folder>/scripts` 文件夹下。
+- 应当按 Carpet Mod 要求将脚本（`*.sc`）放置在 `<world folder>/scripts` 文件夹下。
 
-在游戏中可用 `/script load <name>` 热加载/热重载，`/script unload <name>` 卸载，`/script remove <name>` 扔到回收站。
+- 在游戏中可用 `/script [load|unload|remove] <name>` 来热加载（重载）、卸载或删除脚本。
 
 ## Scbd
 
