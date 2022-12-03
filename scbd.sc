@@ -9,7 +9,7 @@ __on_start() -> (
 	// ensure_scoreboard(记分板ID, 统计类型, 显示名称, 颜色, 是否在订阅列表中忽略)
 	ensure_scoreboard('scbd.mine', 'dummy', format('c 挖掘'), 'yellow');
 	ensure_scoreboard('scbd.place', 'dummy', format('c 放置'), 'aqua');
-	ensure_scoreboard('scbd.play', 'dummy', format('c 在线时长'), 'green');
+	ensure_scoreboard('scbd.play', 'dummy', format('c 在线', 'w  (min)'), 'green');
 	ensure_scoreboard('scbd.walk', 'dummy', format('c 行走', 'w  (km)'), 'dark_aqua');
 	ensure_scoreboard('scbd.aviate', 'dummy', format('c 飞行', 'w  (km)'), 'light_purple');
 	ensure_scoreboard('scbd.bedrock', 'dummy', format('c 破基岩'), 'dark_red');
@@ -41,6 +41,7 @@ global_current = 1;
 
 // 时间计数器
 global_counter = 0;
+global_switch_time = global_switch_time * 20;
 
 // 轮播队伍颜色
 global_roll_color = '';
@@ -61,6 +62,7 @@ __config() -> {
     }
 };
 
+
 // 创建 & 配置记分板
 ensure_scoreboard(objective, criterion, display_name, color, ... exclude) -> (
 	if(scoreboard(objective) == null, scoreboard_add(objective, criterion););
@@ -77,10 +79,12 @@ ensure_scoreboard(objective, criterion, display_name, color, ... exclude) -> (
 	if(exclude != [true], put(global_scoreboards, objective, display_name));
 );
 
+
 // 分数 += 1
 scoreboard_incr(objective, key, value) -> (
 	scoreboard(objective, key, scoreboard(objective, key) + value);
 );
+
 
 // 默认记分板显示帮助
 ensure_help_msg() -> (
@@ -89,6 +93,63 @@ ensure_help_msg() -> (
 	scoreboard('scbd.default', '订阅记分板', 0);
 	scoreboard_property('scbd.default', 'display_slot', 'sidebar');
 );
+
+
+update_all_scbds() -> (
+	for(player('all'),
+		update_scbds(_);
+	);
+);
+
+
+update_scbds(player) -> (
+	if (query(player, 'player_type') == 'fake',
+		run('scoreboard players reset ' + player);
+	,
+		scoreboard('scbd.walk', player, round(statistic(player, 'custom', 'walk_one_cm')  / 100000));
+		scoreboard('scbd.aviate', player, round(statistic(player, 'custom', 'aviate_one_cm')  / 100000));
+		scoreboard('scbd.play', player, round(statistic(player, 'custom', 'play_time')  / 1200));
+	);
+);
+
+
+print_subscription_menu() -> (
+	msg = [];
+	for(global_scoreboards,
+		if(_ != 'scbd.roll',
+			msg = [...msg, 'w [', 'y ' + global_scoreboards:_, '!/scbd join ' + _, 'w ] '];
+		);
+	);
+	print(player(), format('w \n', 'wb 记分板列表', 'w  - 点击以订阅', 'w \n'));
+	print(player(), format('w [', 'cb 轮播', '!/scbd join scbd.roll', 'w ]', 'w  [', 'cb 不显示记分板', '!/scbd join scbd.blank', 'w ]'));
+	print(player(), format(...msg, 'w \n'));
+);
+
+
+subscribe(objective) -> (
+	if(global_scoreboards:objective || objective == 'scbd.blank',
+		team_leave(player());
+		team_add(objective, player());
+		display_title(player(), 'actionbar', format('w 成功订阅 ', 'yb ' + global_scoreboards:objective));
+		run('execute as ' + player() + ' at ' + player() + ' run playsound minecraft:block.wooden_button.click_on voice @s ~ ~ ~');
+	,
+		print(player(), format('r 记分板不存在'));
+		run('execute as ' + player() + ' at ' + player() + ' run playsound minecraft:block.anvil.land voice @s ~ ~ ~ 0.2');
+	);
+);
+
+
+check_all_bedrock(player) -> (
+	for(system_info('world_dimensions'),
+		if (!global_bedrocks~_, global_bedrocks:_ = []);
+		check_dimension_bedrock(_);
+	);
+	for(player('all'),
+		check_player_bedrock(_);
+	);
+	print(player, global_bedrocks);
+);
+
 
 // 破基岩计数
 check_dimension_bedrock(dim) -> (
@@ -106,58 +167,10 @@ check_dimension_bedrock(dim) -> (
 	)
 );
 
-update_all_scbds() -> (
-	for(player('all'),
-		update_scbds(_);
-	);
-);
-
-update_scbds(player) -> (
-	if (query(player, 'player_type') == 'fake',
-		run('scoreboard players reset ' + player);
-	);
-	scoreboard('scbd.walk', player, round(statistic(player, 'custom', 'walk_one_cm')  / 100000));
-	scoreboard('scbd.aviate', player, round(statistic(player, 'custom', 'aviate_one_cm')  / 100000));
-	scoreboard('scbd.play', player, round(statistic(player, 'custom', 'play_time')  / 1200));
-);
-
-print_subscription_menu() -> (
-	msg = [];
-	for(global_scoreboards,
-		if(_ != 'scbd.roll',
-			msg = [...msg, 'w [', 'y ' + global_scoreboards:_, '!/scbd join ' + _, 'w ] '];
-		);
-	);
-	print(player(), format('w \n', 'wb 记分板列表', 'w  - 点击以订阅', 'w \n'));
-	print(player(), format('w [', 'cb 轮播', '!/scbd join scbd.roll', 'w ]', 'w  [', 'cb 不显示记分板', '!/scbd join scbd.blank', 'w ]'));
-	print(player(), format(...msg, 'w \n'));
-);
-
-subscribe(objective) -> (
-	if(global_scoreboards:objective || objective == 'scbd.blank',
-		team_leave(player());
-		team_add(objective, player());
-		display_title(player(), 'actionbar', format('w 成功订阅 ', 'yb ' + global_scoreboards:objective));
-		run('execute as ' + player() + ' at ' + player() + ' run playsound minecraft:block.wooden_button.click_on voice @s ~ ~ ~');
-	,
-		print(player(), format('r 记分板不存在'));
-		run('execute as ' + player() + ' at ' + player() + ' run playsound minecraft:block.anvil.land voice @s ~ ~ ~ 0.2');
-	);
-);
-
-check_all_bedrock() -> (
-	for(system_info('world_dimensions'),
-		if (!global_bedrocks~_, global_bedrocks:_ = []);
-		check_dimension_bedrock(_);
-	);
-	for(player('all'),
-		check_player_bedrock(_);
-	);
-);
 
 check_player_bedrock(e) -> (
 	dim = query(e, 'dimension');
-	bedrocks = global_bedrocks:dim;
+	bedrocks = [];
 	in_dimension(dim,
 		[x, y, z] = query(e, 'pos');
 		[x, y, z] = [floor(x), floor(y), floor(z)];
@@ -177,10 +190,16 @@ check_player_bedrock(e) -> (
 	);
 );
 
+
 __on_player_connects(player) -> (
+	task_thread('sync', 'sync_history_data', player);
+);
+
+
+// 同步历史数据
+sync_history_data(player) -> (
 	if (query(player, 'player_type') != 'fake',
-		// 同步历史数据
-		if(!query(player, 'has_scoreboard_tag', 'synced'),
+		if(!query(player, 'has_scoreboard_tag', 'scbd_synced'),
 			mined = 0;
 			used = 0;
 			for(global_blocks,
@@ -191,22 +210,29 @@ __on_player_connects(player) -> (
 			scoreboard('scbd.place', player, used);
 			scoreboard('scbd.trade', player, statistic(player, 'custom', 'traded_with_villager'));
 			scoreboard('scbd.deaths', player, statistic(player, 'custom', 'deaths'));
-			run('tag ' + player + ' add synced');
+			run('tag ' + player + ' add scbd_synced');
+			print(player, format('[Scbd] ', 'e 成功同步历史数据'))
 		);
 	);
 );
+
 
 __on_player_breaks_block(player, block) -> (
 	scoreboard_incr('scbd.mine', player, 1);
 );
 
+
 __on_player_places_block(player, item_tuple, hand, block) -> (
+	if(block == 'piston' || block == 'sticky_piston',
+		task_thread('check_bedrock', 'check_all_bedrock', player);
+	);
 	scoreboard_incr('scbd.place', player, 1);
 );
 
+
 __on_tick() -> (
 	global_counter += 1;
-	if(global_counter == global_switch_time * 20,
+	if(global_counter == global_switch_time,
 		global_counter = 0;
 		if(keys(global_scoreboards):global_current == 'scbd.roll', global_current += 1);
 		// 轮播记分板
@@ -216,5 +242,4 @@ __on_tick() -> (
 	);
 
 	update_all_scbds();
-	check_all_bedrock();
 );
