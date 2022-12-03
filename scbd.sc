@@ -147,7 +147,6 @@ check_all_bedrock(player) -> (
 	for(player('all'),
 		check_player_bedrock(_);
 	);
-	print(player, global_bedrocks);
 );
 
 
