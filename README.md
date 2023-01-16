@@ -2,9 +2,7 @@
 
 一些~~有用的~~ [Scarpet](https://github.com/gnembon/scarpet) 脚本
 
-- 仅在 `Minecraft 1.19.2`, `Carpet Mod v1.4.84` 下测试通过。
-
-- Scarpet 文档中未给出 API 兼容说明，请自行测试。
+- 仅在 `Minecraft 1.19.2`, `Carpet Mod v1.4.84` 下测试通过。Scarpet 文档中未给出相关兼容说明，其他版本请自行测试。
 
 - 直接从仓库中下载对应的脚本（`*.sc`）并按 Carpet Mod 要求放置在 `<world folder>/scripts` 文件夹下。
 
