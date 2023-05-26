@@ -15,7 +15,7 @@ __on_player_message(player, message) -> (
         [item, amount, nbts] = item;
         nbts = replace(nbts, '\\"', '\\\\"');
 
-        json_text = [];
+        json_text = [str('\"<%s> \"', player())];
         parts = split('\\[i\\]', message);
         first = true;
         if (!parts,
