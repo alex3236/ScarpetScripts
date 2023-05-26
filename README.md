@@ -15,12 +15,12 @@
 ![动画](https://github.com/alex3236/ScarpetScripts/assets/45303195/be7436b3-ef3f-484e-ab01-1801c8d83884)
 
 - 否则，请手动安装：
-  - 从仓库中下载对应的脚本（`*.sc`）并放置在 `<世界文件夹>/scripts` 目录下；
+  - 下载对应的脚本（右键蓝色标题，选择另存为）并放置在 `<世界文件夹>/scripts` 目录下；
   - 用 `/script load <name>` 加载脚本。
 
 - `/script [load|unload|remove] <name>` 对应热加载（重载）、卸载、删除脚本。
 
-## Show Me What You Got
+## [Show Me What You Got](https://github.com/alex3236/ScarpetScripts/raw/main/smwyg.sc)
 
 ![image](https://github.com/alex3236/ScarpetScripts/assets/45303195/52607e67-ba7f-4aac-b72b-b760b1e5c83e)
 
@@ -28,7 +28,7 @@
 
 在聊天框中输入 `[i]`，`[i]` 将被替换成**主手**物品信息。
 
-## Scbd
+## [Scbd](https://github.com/alex3236/ScarpetScripts/raw/main/scbd.sc)
 
 ![scbd](https://s2.loli.net/2022/11/21/1HScua4GfBJIrg2.png)
 
@@ -38,7 +38,7 @@
 
 `/scbd` 显示可订阅记分板菜单，点击即可订阅。
 
-## Sys
+## [Sys](https://github.com/alex3236/ScarpetScripts/raw/main/sys.sc)
 
 ![sys](https://s2.loli.net/2022/11/21/GeOWAPXzv67wCB9.png)
 
