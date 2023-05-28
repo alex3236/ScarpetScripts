@@ -5,13 +5,9 @@ import re
 
 import requests
 
-txt = requests.get(r'https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html').text
+txt = requests.get(r'https://minecraft.fandom.com/api.php?action=parse&format=json&prop=text%7Cmodules%7Cjsconfigvars&title=Java_Edition_data_values&text=%7B%7B%3AJava%20Edition%20data%20values%2FBlocks%7D%7D').text
 
-# print(txt)
-
-blocks = set(re.findall('class="member-name-link">([A-Z_]+?)</a>', txt))
-
-blocks = [i.lower() for i in blocks if not i.startswith('LEGACY')]
+blocks = re.findall('<code>(\w+?)<\/code>', txt)
 
 print(f'Got {len(blocks)} blocks:\n')
 
