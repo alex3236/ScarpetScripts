@@ -6,13 +6,11 @@
 
 ## 如何安装
 
-- 如果你的服务器可以正常访问 Github，则可以使用命令快速安装：
+- ~~如果你的服务器可以正常访问 Github，则可以使用命令快速安装：~~
 ```
 /carpet scriptsAppStore alex3236/ScarpetScripts/contents
 /script download <文件名>
 ```
-
-![动画](https://github.com/alex3236/ScarpetScripts/assets/45303195/be7436b3-ef3f-484e-ab01-1801c8d83884)
 
 - 否则，请手动安装：
   - 下载对应的脚本（右键蓝色标题，选择另存为）并放置在 `<世界文件夹>/scripts` 目录下；
@@ -20,7 +18,7 @@
 
 - `/script [load|unload|remove] <name>` 对应热加载（重载）、卸载、删除脚本。
 
-## [Show Me What You Got](https://github.com/alex3236/ScarpetScripts/raw/main/smwyg.sc)
+## ~~Show Me What You Got~~ (请使用 [ItemChat Fabric](https://modrinth.com/mod/itemchat))
 
 ![image](https://github.com/alex3236/ScarpetScripts/assets/45303195/52607e67-ba7f-4aac-b72b-b760b1e5c83e)
 
